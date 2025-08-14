@@ -58,6 +58,10 @@ io.modelcontextprotocol.spec.McpSchema.ListToolsResult listTools = client.listTo
 - **inputSchema** (JsonSchema): 输入参数的JSON Schema定义
 - **outputSchema** (Map<String, Object>): 输出结果的结构定义
 
+**描述字段处理规范**:
+- 在工具列表展示时，description字段应只显示 **Responses:** 之前的内容
+- 完整的description内容应保留用于"查看详情"功能
+
 ### 支持的工具格式
 
 #### 1. 标准格式

@@ -160,11 +160,21 @@
         </el-dialog>
 
         <!-- 查看工具对话框 -->
-        <el-dialog v-model="toolsDialogVisible" :title="'MCP服务工具 - ' + currentServer?.name" width="800px">
+        <el-dialog v-model="toolsDialogVisible" :title="'MCP服务工具 - ' + currentServer?.name" width="1200px">
             <div v-if="currentTools.length > 0">
                 <el-table :data="currentTools" style="width: 100%" :row-class-name="tableRowClassName">
-                    <el-table-column prop="name" label="工具名称" width="180"></el-table-column>
-                    <el-table-column prop="description" label="描述" width="250"></el-table-column>
+                    <el-table-column prop="name" label="工具名称" width="200"></el-table-column>
+                    <el-table-column prop="shortDescription" label="描述" width="300"></el-table-column>
+                    <el-table-column prop="inputSchema" label="输入参数" width="250">
+                        <template #default="scope">
+                            <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ formatJson(scope.row.inputSchema) }}</pre>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="outputSchema" label="返回值" width="250">
+                        <template #default="scope">
+                            <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ formatJson(scope.row.outputSchema) }}</pre>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="150">
                         <template #default="scope">
                             <el-button size="small" @click="viewToolDetail(scope.row)">查看详情</el-button>
@@ -426,7 +436,14 @@
                     try {
                         const response = await fetch(`/api/mcp-servers/${server.id}/tools`);
                         if (response.ok) {
-                            currentTools.value = await response.json();
+                            const tools = await response.json();
+                            // 处理描述字段，只保留 Responses: 之前的内容
+                            currentTools.value = tools.map(tool => {
+                                return {
+                                    ...tool,
+                                    shortDescription: tool.description ? tool.description.split('**Responses:**')[0].trim() : ''
+                                };
+                            });
                         } else {
                             const errorText = await response.text();
                             ElMessage.error('获取工具信息失败: ' + errorText);
