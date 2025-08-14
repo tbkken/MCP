@@ -1,6 +1,0 @@
-com/example/mcpmanager/repository/McpServerRepository.class
-com/example/mcpmanager/entity/McpServer.class
-com/example/mcpmanager/McpManagerApplication.class
-com/example/mcpmanager/controller/McpServerController.class
-com/example/mcpmanager/service/McpServerService.class
-com/example/mcpmanager/entity/McpTool.class
